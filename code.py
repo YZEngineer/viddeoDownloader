@@ -2,6 +2,21 @@ import os
 from pytubefix import YouTube, Playlist
 from pytubefix.cli import on_progress
 import sys
+import subprocess
+
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+def check_and_install(package):
+    try:
+        __import__(package)
+    except ImportError:
+        print(f"{package} ...")
+        install(package)
+    else:
+        print(f"{package} + .")
+
 
 # Function to create a safe filename for paths only, NOT for video titles
 def safe_path(title):
@@ -97,6 +112,7 @@ def handle_url(url, downloads_dir):
 
 # Main function to read links from file and download
 def main():
+    check_and_install('pytubefix') 
     # Set downloads directory relative to script location or executable location
     if getattr(sys, 'frozen', False):
         # If running as executable
@@ -146,5 +162,4 @@ if __name__ == "__main__":
         print(f"An unexpected error occurred: {str(e)}")
         input("Press Enter to exit...")
 
-# Note: Before using this script, you need to install pytube using:
-# pip install pytube 
+# Note: Before using this script, you need to install pytubefix  using:
